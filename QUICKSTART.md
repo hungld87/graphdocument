@@ -21,7 +21,7 @@ git clone https://github.com/hungld7/documentgraph.git .
 
 ```bash
 # Tạo thư mục input
-mkdir -p docs/raw docs/text
+mkdir -p docs/raw
 
 # Copy template env
 cp graph_rag/.env.example graph_rag/.env
