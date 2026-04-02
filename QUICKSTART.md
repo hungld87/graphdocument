@@ -1,6 +1,7 @@
 # QUICKSTART — DocumentGraph cho User Mới
 
 Hướng dẫn từ zero đến chạy MCP kết nối Copilot với DocumentGraph.
+**Tất cả tài liệu của User được indexing và lưu trữ trên chính máy của User**
 
 ## Bước 1: Clone hoặc tạo workspace mới
 
@@ -68,8 +69,11 @@ Chờ khoảng 1-2 phút cho các container khởi động.
 
 ### Option A: Ollama (local, miễn phí, mặc định)
 
-Pull models **trên host machine** (không phải Docker):
+```bash
+Install Ollama trên local: https://ollama.com/
+```
 
+Pull models **trên host machine**:
 ```bash
 ollama pull llama3.2
 ollama pull nomic-embed-text
@@ -101,13 +105,13 @@ Sau đó rebuild image: `cd graph_rag && docker build -t hungld7/documentgraph:l
 
 1. Mở VS Code tại thư mục root workspace
 2. Nếu chưa có, cài extension **GitHub Copilot Chat**
-3. Mở Command Palette (`Cmd+Shift+P`) và chạy: `Copilot: Edit Copilot Settings as JSON`
-4. Paste nội dung của file `graph_rag/mcp.json` vào phần `mcpServers`:
+3. Tạo folder .vscode tại workspace, tạo file mcp.json
+4. Paste nội dung sau vào `mcp.json`:
 
 ```json
 {
   "servers": {
-    "graph-rag-kg": {
+    "documentgraph": {
       "type": "stdio",
       "command": "docker",
       "args": [
@@ -123,38 +127,31 @@ Sau đó rebuild image: `cd graph_rag && docker build -t hungld7/documentgraph:l
         "-e",
         "MCP_WORKSPACE_ROOT=/workspace",
         "-e",
+        "RAWDATA=/workspace/docs/raw",
+        "-e",
+        "PARSER=/workspace/.graph_rag/parsed",
+        "-e",
         "NEO4J_URI=bolt://host.docker.internal:7687",
         "-e",
         "QDRANT_URL=http://host.docker.internal:6333",
         "hungld7/documentgraph:latest"
       ]
-    },
-    "searxng": {
-      "type": "stdio",
-      "command": "docker",
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "-e",
-        "SEARXNG_URL=http://host.docker.internal:8080",
-        "mcp/searxng:latest"
-      ]
     }
   }
 }
 ```
+Note
+```json
+RAWDATA: docs/raw - là thư mục chứa file gốc
+PARSER: .graph_rag/parsed - là các file đã được parser thành txt
+```
 
 5. Lưu file
-6. Reload VS Code (`Cmd+Shift+P` → "Developer: Reload Window")
 
 ## Bước 7: Kiểm tra MCP server
 
 1. Mở Copilot Chat (`Cmd+K`)
-2. Gõ `@` để thấy danh sách MCP servers
-3. Nên thấy 2 server:
-   - `graph-rag-kg`
-   - `searxng`
+2. Gõ /docHelp
 
 ## Bước 8: Thêm tài liệu vào workspace
 
@@ -172,14 +169,7 @@ Hỏi: Hệ thống yêu cầu SLA là gì?
 
 Agent sẽ:
 1. Gọi `semantic_search()` để tìm trong DocumentGraph
-2. Nếu không đủ, gọi SearXNG để tìm web
-3. Trả lời có dẫn chứ từ tài liệu (file, text_unit_id, trích dẫn)
-
-## Lưu ý quan trọng
-
-- **Neo4j web UI**: http://localhost:7474 (user: neo4j, password: neo4jpassword)
-- **Qdrant web UI**: http://localhost:6333/dashboard
-- **SearXNG web UI**: http://localhost:8080
+2. Trả lời có dẫn chứ từ tài liệu (file, text_unit_id, trích dẫn)
 
 Nếu cần reset DB: `docker restart documentgraph-neo4j documentgraph-qdrant`
 
