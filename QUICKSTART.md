@@ -94,6 +94,24 @@ EMBEDDING_PROVIDER=azure
 AZURE_EMBEDDING_DEPLOYMENT_ID=your_embedding_deployment
 ```
 
+## Cấu hình máy tối thiểu:
+
+Để chạy ổn định DocumentGraph + Ollama (`llama3.2` + `nomic-embed-text`) trên máy local:
+
+- CPU: tối thiểu 4 cores (Apple Silicon M1 hoặc Intel i5 đời mới trở lên)
+- RAM: tối thiểu 16GB (8GB vẫn có thể chạy nhưng sẽ chậm khi ingest/query)
+- Disk trống: tối thiểu 20GB (chứa Docker images, Neo4j/Qdrant data, Ollama models)
+- Docker Desktop: đang chạy ổn định, nên cấp ít nhất 6GB RAM cho Docker
+
+Mốc đề xuất để trải nghiệm tốt hơn:
+- RAM 24GB+ nếu tài liệu nhiều hoặc ingest file lớn
+- Apple Silicon (M1/M2/M3) cho tốc độ xử lý tốt hơn CPU-only truyền thống
+
+### Lưu ý về image
+
+- Hiện tại hệ thống **chưa đọc được nội dung từ ảnh** (PNG/JPG/JPEG, ảnh scan trong PDF) do chưa tích hợp OCR.
+- Nếu tài liệu của bạn là ảnh scan, cần OCR trước rồi mới ingest để truy vấn chính xác.
+
 ## Bước 6: Cấu hình MCP trong VS Code
 
 1. Mở VS Code tại thư mục root workspace
@@ -172,5 +190,6 @@ Nếu cần reset DB: `docker restart documentgraph-neo4j documentgraph-qdrant`
 |---|---|
 | MCP server không kết nối | Check docker ps, neo4j/qdrant có running không |
 | Ollama model not found | Chạy `ollama ls` kiểm tra, pull lại nếu cần |
+| File ảnh không tìm được nội dung | Hiện chưa có OCR, cần chuyển ảnh/scan sang text trước khi ingest |
 | Timeout khi ingest file lớn | Tăng `TOP_K` trong .env hoặc split file |
 | DocumentGraph không tìm được info | Kiểm tra tài liệu đã index chưa bằng tool `health()` |
