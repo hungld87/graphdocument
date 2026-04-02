@@ -94,13 +94,6 @@ EMBEDDING_PROVIDER=azure
 AZURE_EMBEDDING_DEPLOYMENT_ID=your_embedding_deployment
 ```
 
-Sau đó rebuild image: `cd graph_rag && docker build -t hungld7/documentgraph:latest .`
-
-**Tại sao pull Ollama ở ngoài Docker?**
-- Ollama là app độc lập trên macOS, không nằm trong container
-- DocumentGraph container kết nối tới Ollama trên host qua `http://host.docker.internal:11434`
-- Models lưu ở `~/.ollama/models/` trên macOS, không cần copy vào Docker
-
 ## Bước 6: Cấu hình MCP trong VS Code
 
 1. Mở VS Code tại thư mục root workspace
