@@ -8,13 +8,13 @@ Hướng dẫn từ zero đến chạy MCP kết nối Copilot với DocumentGra
 ```bash
 # Option A: Nếu bạn đã có repo
 cd /your/workspace
-git clone https://github.com/hungld7/documentgraph.git
+git clone https://github.com/hungld87/graphdocument.git
 cd documentgraph
 
 # Option B: Nếu tạo workspace mới
 mkdir my-documentgraph-workspace
 cd my-documentgraph-workspace
-git clone https://github.com/hungld7/documentgraph.git .
+git clone https://github.com/hungld87/graphdocument.git .
 ```
 
 ## Bước 2: Chuẩn bị cấu trúc thư mục
