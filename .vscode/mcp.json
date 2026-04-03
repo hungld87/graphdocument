@@ -1,6 +1,6 @@
 {
   "servers": {
-    "graph-rag-kg": {
+    "documentgraph": {
       "type": "stdio",
       "command": "docker",
       "args": [
@@ -16,24 +16,14 @@
         "-e",
         "MCP_WORKSPACE_ROOT=/workspace",
         "-e",
+        "RAWDATA=/workspace/docs/raw",
+        "-e",
+        "PARSER=/workspace/.graph_rag/parsed",
+        "-e",
         "NEO4J_URI=bolt://host.docker.internal:7687",
         "-e",
         "QDRANT_URL=http://host.docker.internal:6333",
         "hungld7/documentgraph:latest"
-      ]
-    },
-    "searxng": {
-      "type": "stdio",
-      "command": "docker",
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "-e",
-        "SEARXNG_URL=http://host.docker.internal:8080",
-        "-e",
-        "SEARXNG_API_KEY",
-        "mcp/searxng:latest"
       ]
     }
   }
